@@ -1,5 +1,5 @@
 import React from 'react'
-//import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import Book from './Books'
 import './App.css'
 
@@ -30,26 +30,30 @@ class BooksApp extends React.Component {
       {
         "title": "To Kill a Mockingbird",
         "cover": "http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api",
-        "authors": "Harper Lee",
-        "curShelf": "currentlyReading"
+        "authors": ["Harper Lee", "yo"],
+        "curShelf": "currentlyReading",
+        "id": 1
       },
       {
         "title": "Ender's Game",
         "cover": "http://books.google.com/books/content?id=yDtCuFHXbAYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72RRiTR6U5OUg3IY_LpHTL2NztVWAuZYNFE8dUuC0VlYabeyegLzpAnDPeWxE6RHi0C2ehrR9Gv20LH2dtjpbcUcs8YnH5VCCAH0Y2ICaKOTvrZTCObQbsfp4UbDqQyGISCZfGN&source=gbs_api",
-        "authors": "Orson Scott Card",
-        "curShelf": "currentlyReading"
+        "authors": ["Orson Scott Card"],
+        "curShelf": "currentlyReading",
+        "id": 2
       },
       {
         "title": "1776",
         "cover": "http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api",
-        "authors": "David McCullough",
-        "curShelf": "wantToRead"
+        "authors": ["David McCullough"],
+        "curShelf": "wantToRead",
+        "id": 3
       },
       {
         "title": "Harry Potter",
         "cover": "http://books.google.com/books/content?id=wrOQLV6xB-wC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE72G3gA5A-Ka8XjOZGDFLAoUeMQBqZ9y-LCspZ2dzJTugcOcJ4C7FP0tDA8s1h9f480ISXuvYhA_ZpdvRArUL-mZyD4WW7CHyEqHYq9D3kGnrZCNiqxSRhry8TiFDCMWP61ujflB&source=gbs_api",
-        "authors": "J. K. Rowling",
-        "curShelf": "read"
+        "authors": ["J. K. Rowling"],
+        "curShelf": "read",
+        "id": 4
       }
     ]
   }
@@ -64,7 +68,7 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
               <div className="search-books-input-wrapper">
-                {/*
+                { /*
                   //TODO: implement BooksAPI.search
                   //TODO: manage routes
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -78,6 +82,12 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="search-books-results">
+              <p>{
+               `${BooksAPI.search("Time",2).then((books) => {
+               JSON.stringify(books[0])})}`
+               }
+
+              }</p>
               <ol className="books-grid"></ol>
             </div>
           </div>
@@ -89,14 +99,17 @@ class BooksApp extends React.Component {
 
             <div className="list-books-content">
               <div>
+                {/*{this.setState((prevState) => ({
+                  books: [BooksAPI.get("8jZBksh-bUMC")]
+                  }))}*/
+                  }
                 {this.state.shelves.map((shelf) => (
                   <div className="bookshelf" key={shelf.id}>
                     <h2 className="bookshelf-title">{shelf.label}</h2>
                     <div className="bookshelf-books">
                       <ol className="books-grid">
                         {this.state.books.filter((b) => b.curShelf === shelf.id).map((b) => (
-
-                          <li key={b.title} className="book-list-item">
+                          <li key={b.id} className="book-list-item">
                             <Book book={b}/>
                           </li>
                         ))}
