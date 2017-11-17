@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Shelf from './Shelf'
+import Book from './Books'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -20,12 +21,23 @@ class BooksApp extends React.Component {
         "label": "Read"
       }
     ],
-    books: []
+    books: [],
+    query: ""
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
+    })
+  }
+
+  updateQuery = (query) => {
+    BooksAPI.search(query, 20).then((results) => {
+      (!results["error"]) ? (
+        this.setState({ query: query, books: results} )
+      ) : (
+        this.setState({ query: query, books: [] })
+      )
     })
   }
 
@@ -70,11 +82,24 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               <Link className="close-search" to="/">Close</Link>
               <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author"/>
+                <input
+                  type="text"
+                  value={this.state.query}
+                  onChange={(event) =>
+                    this.updateQuery(event.target.value)}
+                  placeholder="Search by title or author"/>
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ul className="books-grid">
+                {this.state.books.map((book) => (
+                  <li key={book.id} className="book-list-item">
+                    <Book
+                      book={book}
+                      onSelectShelf={this.onSelectShelf}/>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         )}/>
