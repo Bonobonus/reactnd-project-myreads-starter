@@ -1,0 +1,47 @@
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import * as BooksAPI from './BooksAPI'
+import Book from './Books'
+
+class Shelf extends Component {
+  static propTypes = {
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    onSelectShelf: PropTypes.func.isRequired
+  }
+
+  state = {
+    booksInShelf: []
+  }
+
+  componentDidMount() {
+    BooksAPI.getAll().then((books) => {
+      this.setState({
+        booksInShelf: books.filter((book) => book.shelf === this.props.id)
+      })
+    })
+  }
+
+  render() {
+    const { id, label, onSelectShelf } = this.props;
+
+    return(
+      <div className="bookshelf" key={id}>
+        <h2 className="bookshelf-title">{label}</h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+            {this.state.booksInShelf.map((book) => (
+              <li key={book.id} className="book-list-item">
+                <Book
+                  book={book}
+                  onSelectShelf={onSelectShelf}/>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default Shelf;
