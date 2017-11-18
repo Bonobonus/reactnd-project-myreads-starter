@@ -19,6 +19,10 @@ class BooksApp extends React.Component {
       {
         "id": "read",
         "label": "Read"
+      },
+      {
+        "id": "none",
+        "label": "None"
       }
     ],
     books: [],
@@ -41,7 +45,10 @@ class BooksApp extends React.Component {
     })
   }
 
-  //TODO: setState to change a Book's Shelf
+  clearBooks() {
+    this.setState({ books: [] })
+  }
+
   onSelectShelf(bookId, shelf) {
     //BooksAPI.update(bookId, shelf)
   /*  this.setState((state) => ({
@@ -62,12 +69,14 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  {this.state.shelves.map((shelf) => (
+                  {this.state.shelves.filter((shelf) => shelf.id !== "none").map((shelf) => (
                     <Shelf
                       key={`${shelf.id}_shelf`}
                       id={shelf.id}
                       label={shelf.label}
-                      onSelectShelf={this.onSelectShelf}/>
+                      onSelectShelf={this.onSelectShelf}
+                      booksInShelf={this.state.books.filter((book) => book.shelf === shelf.id)}
+                      shelves={this.state.shelves}/>
                   ))}
                 </div>
               </div>
@@ -77,6 +86,7 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )}/>
+        //TODO: Make the search screen its own component
         <Route exact path="/search" key="searchPage" render={() => (
           <div className="search-books">
             <div className="search-books-bar">

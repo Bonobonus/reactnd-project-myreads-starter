@@ -7,19 +7,9 @@ class Shelf extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    onSelectShelf: PropTypes.func.isRequired
-  }
-
-  state = {
-    booksInShelf: []
-  }
-
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({
-        booksInShelf: books.filter((book) => book.shelf === this.props.id)
-      })
-    })
+    onSelectShelf: PropTypes.func.isRequired,
+    booksInShelf: PropTypes.array.isRequired,
+    shelves: PropTypes.array.isRequired
   }
 
   render() {
@@ -30,11 +20,12 @@ class Shelf extends Component {
         <h2 className="bookshelf-title">{label}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {this.state.booksInShelf.map((book) => (
+            {this.props.booksInShelf.map((book) => (
               <li key={book.id} className="book-list-item">
                 <Book
                   book={book}
-                  onSelectShelf={onSelectShelf}/>
+                  onSelectShelf={onSelectShelf}
+                  shelves={this.props.shelves}/>
               </li>
             ))}
           </ol>
