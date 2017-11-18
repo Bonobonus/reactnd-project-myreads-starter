@@ -1,8 +1,8 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
-import Shelf from './Shelf'
-import Book from './Books'
+import Library from './Library'
+import Search from './Search'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -24,25 +24,11 @@ class BooksApp extends React.Component {
         "id": "none",
         "label": "None"
       }
-    ],
-    books: [],
-    query: ""
+    ]
   }
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({ books })
-    })
-  }
-
-  updateQuery = (query) => {
-    BooksAPI.search(query, 20).then((results) => {
-      (!results["error"]) ? (
-        this.setState({ query: query, books: results} )
-      ) : (
-        this.setState({ query: query, books: [] })
-      )
-    })
+  getBooks = (books) => {
+    this.setState({ books })
   }
 
   clearBooks() {
@@ -61,59 +47,18 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route exact path="/" key="mainPage" render={() => (
-          <div>
-            <div className="list-books">
-              <div className="list-books-title">
-                <h1>MyReads</h1>
-              </div>
-              <div className="list-books-content">
-                <div>
-                  {this.state.shelves.filter((shelf) => shelf.id !== "none").map((shelf) => (
-                    <Shelf
-                      key={`${shelf.id}_shelf`}
-                      id={shelf.id}
-                      label={shelf.label}
-                      onSelectShelf={this.onSelectShelf}
-                      booksInShelf={this.state.books.filter((book) => book.shelf === shelf.id)}
-                      shelves={this.state.shelves}/>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="open-search">
-              <Link className="open-search-link" to="/search">Add a book</Link>
-            </div>
-          </div>
+        //<Switch>
+        <Route exact path="/" key="library" render={() => (
+          <Library
+            onSelectShelf={this.onSelectShelf}
+            shelves={this.state.shelves}/>
         )}/>
-        //TODO: Make the search screen its own component
-        <Route exact path="/search" key="searchPage" render={() => (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <Link className="close-search" to="/">Close</Link>
-              <div className="search-books-input-wrapper">
-                <input
-                  type="text"
-                  value={this.state.query}
-                  onChange={(event) =>
-                    this.updateQuery(event.target.value)}
-                  placeholder="Search by title or author"/>
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ul className="books-grid">
-                {this.state.books.map((book) => (
-                  <li key={book.id} className="book-list-item">
-                    <Book
-                      book={book}
-                      onSelectShelf={this.onSelectShelf}/>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+        <Route exact path="/search" key="search" render={() => (
+          <Search
+            onSelectShelf={this.onSelectShelf}
+            shelves={this.state.shelves}/>
         )}/>
-
+        //</Switch>
       </div>
     )
   }

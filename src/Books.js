@@ -38,7 +38,7 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title" key={book.title}>{book.title||"No title"}</div>
-        <div className="book-authors" key={book.authors.join("_")}>{book.authors.join(', ')||"No authors"}</div>
+        <div className="book-authors" key={book.authors.join("_")||book.id+"_no_author"}>{book.authors.join(', ')||"No authors"}</div>
       </div>
     )
   }
