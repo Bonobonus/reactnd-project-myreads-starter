@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom'
-import Shelf from './Shelf'
 import Book from './Books'
 import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as BooksAPI from './BooksAPI'
 import Book from './Books'
 
 class Shelf extends Component {
@@ -10,6 +9,11 @@ class Shelf extends Component {
     onSelectShelf: PropTypes.func.isRequired,
     booksInShelf: PropTypes.array.isRequired,
     shelves: PropTypes.array.isRequired
+  }
+
+  onSelectShelf(book, shelf) {
+    //BooksAPI.update(book, shelf).then((res) => console.log(res))
+    console.log("got here")
   }
 
   render() {
@@ -24,7 +28,7 @@ class Shelf extends Component {
               <li key={book.id} className="book-list-item">
                 <Book
                   book={book}
-                  onSelectShelf={onSelectShelf}
+                  onSelectShelf={this.props.onSelectShelf}
                   shelves={this.props.shelves}/>
               </li>
             ))}
