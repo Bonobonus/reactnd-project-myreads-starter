@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import Library from './Library'
 import Search from './Search'
 import * as BooksAPI from './BooksAPI'
+import sortBy from 'sort-by'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -35,7 +36,7 @@ class BooksApp extends React.Component {
 
   getBooks() {
     BooksAPI.getAll().then((books) => (
-      this.setState({ books })
+      this.setState({ books: books.sort(sortBy("title")) })
     ))
   }
 

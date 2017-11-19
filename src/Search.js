@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Book from './Books'
 import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'
+import sortBy from 'sort-by'
 
 class Search extends React.Component {
   static propTypes = {
@@ -22,8 +23,8 @@ class Search extends React.Component {
   }
 
   updateResults = (results) => {
-    //this.setState({ books: results })
-    this.setState({ results: results.map((x) => Object.assign(x, this.props.books.find((y) => y.id === x.id))) })
+    let res = results.map((x) => Object.assign(x, this.props.books.find((y) => y.id === x.id)))
+    this.setState({ results: res.sort(sortBy("title")) })
   }
 
   /*componentDidMount() {
