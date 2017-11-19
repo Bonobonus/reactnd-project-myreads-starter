@@ -2,9 +2,15 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import Library from './Library'
 import Search from './Search'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 
 class BooksApp extends React.Component {
+  constructor(props) {
+    super(props)
+    this.onSelectShelf = this.onSelectShelf.bind(this)
+  }
+
   state = {
     shelves: [
       {
@@ -23,41 +29,42 @@ class BooksApp extends React.Component {
         "id": "none",
         "label": "None"
       }
-    ]
+    ],
+    books: []
   }
 
-  getBooks = (books) => {
-    this.setState({ books })
+  getBooks() {
+    BooksAPI.getAll().then((books) => (
+      this.setState({ books })
+    ))
   }
 
-  clearBooks() {
-    this.setState({ books: [] })
+  componentDidMount() {
+    this.getBooks()
   }
 
-  onSelectShelf(bookId, shelf) {
-    //BooksAPI.update(bookId, shelf)
-  /*  this.setState((state) => ({
-      books: state.books.map((b) => {
-        if (b.id === bookId) b.shelf = shelf
-      })
-    })*/
+  onSelectShelf(book, shelf) {
+    BooksAPI.update(book, shelf).then((books) => this.getBooks())
   }
+
 
   render() {
     return (
       <div className="app">
-        //<Switch>
+        <Switch>
         <Route exact path="/" key="library" render={() => (
           <Library
             onSelectShelf={this.onSelectShelf}
-            shelves={this.state.shelves}/>
+            shelves={this.state.shelves}
+            books={this.state.books}/>
         )}/>
-        <Route exact path="/search" key="search" render={() => (
+        <Route exact path="/search" key="search" render={({ history }) => (
           <Search
             onSelectShelf={this.onSelectShelf}
-            shelves={this.state.shelves}/>
+            shelves={this.state.shelves}
+            books={this.state.books}/>
         )}/>
-        //</Switch>
+        </Switch>
       </div>
     )
   }

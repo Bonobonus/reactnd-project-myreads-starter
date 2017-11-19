@@ -11,13 +11,8 @@ class Shelf extends Component {
     shelves: PropTypes.array.isRequired
   }
 
-  onSelectShelf(book, shelf) {
-    //BooksAPI.update(book, shelf).then((res) => console.log(res))
-    console.log("got here")
-  }
-
   render() {
-    const { id, label, onSelectShelf } = this.props;
+    const { id, label } = this.props;
 
     return(
       <div className="bookshelf" key={id}>

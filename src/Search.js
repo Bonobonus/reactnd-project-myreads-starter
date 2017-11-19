@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Book from './Books'
 import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'
@@ -8,11 +8,11 @@ class Search extends React.Component {
   static propTypes = {
     shelves: PropTypes.array.isRequired,
     onSelectShelf: PropTypes.func.isRequired,
-    //clearBooks: PropTypes.func.isRequired
+    books: PropTypes.array.isRequired
   }
 
   state = {
-    books: [],
+    results: [],
     query: ""
   }
 
@@ -22,11 +22,12 @@ class Search extends React.Component {
   }
 
   updateResults = (results) => {
-    this.setState({ books: results })
+    //this.setState({ books: results })
+    this.setState({ results: results.map((x) => Object.assign(x, this.props.books.find((y) => y.id === x.id))) })
   }
 
   /*componentDidMount() {
-    this.props.clearBooks()
+    this.state.results && this.updateQuery("")
   }*/
 
   render() {
@@ -45,7 +46,7 @@ class Search extends React.Component {
         </div>
         <div className="search-books-results">
           <ul className="books-grid">
-            {this.state.books.map((book) => (
+            {this.state.results.map((book) => (
               <li key={book.id} className="book-list-item">
                 <Book
                   book={book}

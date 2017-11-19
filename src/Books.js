@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import * as BooksAPI from './BooksAPI'
 
 class Book extends Component {
   static propTypes = {
@@ -26,10 +25,10 @@ class Book extends Component {
           <div className="book-cover" style={{
             width: 128,
             height: 193,
-            backgroundImage: `url(${book["imageLinks"]["thumbnail"]})`
+            backgroundImage: (book["imageLinks"]) ? `url(${book["imageLinks"]["thumbnail"]})` : 'Sorry, no image'
           }}></div>
           <div className="book-shelf-changer">
-            <select onChange={this.setTargetShelf} defaultValue="none">
+            <select onChange={this.setTargetShelf.bind(this)} defaultValue="none">
               <option value="none" disabled>Move to...</option> //this is basically a static title
               {this.props.shelves.map((shelf) => (
                 <option
