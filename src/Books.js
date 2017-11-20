@@ -8,10 +8,6 @@ class Book extends Component {
     shelves: PropTypes.array.isRequired
   }
 
-  state = {
-    s: ""
-  }
-
   setTargetShelf = (e) => {
     this.props.onSelectShelf(this.props.book, e.target.value)
   }
@@ -28,7 +24,7 @@ class Book extends Component {
             backgroundImage: (book["imageLinks"]) ? `url(${book["imageLinks"]["thumbnail"]})` : 'Sorry, no image'
           }}></div>
           <div className="book-shelf-changer">
-            <select onChange={this.setTargetShelf.bind(this)} defaultValue="none">
+            <select onChange={this.setTargetShelf.bind(this)} defaultValue={book["shelf"] || "none"}>
               <option value="none" disabled>Move to...</option> //this is basically a static title
               {this.props.shelves.map((shelf) => (
                 <option

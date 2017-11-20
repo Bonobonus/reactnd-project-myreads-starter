@@ -7,12 +7,7 @@ class Library extends React.Component {
   static propTypes = {
     books: PropTypes.array.isRequired,
     shelves: PropTypes.array.isRequired,
-    //getBooks: PropTypes.func.isRequired
     onSelectShelf: PropTypes.func.isRequired
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.render()
   }
 
   render() {

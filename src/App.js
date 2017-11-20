@@ -10,28 +10,28 @@ class BooksApp extends React.Component {
   constructor(props) {
     super(props)
     this.onSelectShelf = this.onSelectShelf.bind(this)
-  }
 
-  state = {
-    shelves: [
-      {
-        "id": "currentlyReading",
-        "label": "Currently Reading"
-      },
-      {
-        "id": "wantToRead",
-        "label": "Want to Read"
-      },
-      {
-        "id": "read",
-        "label": "Read"
-      },
-      {
-        "id": "none",
-        "label": "None"
-      }
-    ],
-    books: []
+    this.state = {
+      shelves: [
+        {
+          "id": "currentlyReading",
+          "label": "Currently Reading"
+        },
+        {
+          "id": "wantToRead",
+          "label": "Want to Read"
+        },
+        {
+          "id": "read",
+          "label": "Read"
+        },
+        {
+          "id": "none",
+          "label": "None"
+        }
+      ],
+      books: []
+    }
   }
 
   getBooks() {

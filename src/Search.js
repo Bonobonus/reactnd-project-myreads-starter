@@ -4,22 +4,20 @@ import Book from './Books'
 import * as BooksAPI from './BooksAPI'
 import PropTypes from 'prop-types'
 import sortBy from 'sort-by'
+import { Debounce } from 'react-throttle'
 
 class Search extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      results: []
+    }
+  }
+
   static propTypes = {
     shelves: PropTypes.array.isRequired,
     onSelectShelf: PropTypes.func.isRequired,
     books: PropTypes.array.isRequired
-  }
-
-  state = {
-    results: [],
-    query: ""
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query })
-    BooksAPI.search(query, 20).then((results) => !results["error"] && this.updateResults(results))
   }
 
   updateResults = (results) => {
@@ -27,9 +25,9 @@ class Search extends React.Component {
     this.setState({ results: res.sort(sortBy("title")) })
   }
 
-  /*componentDidMount() {
-    this.state.results && this.updateQuery("")
-  }*/
+  searchAgain = (query) => {
+    query && BooksAPI.search(query, 20).then((results) => !results["error"] && this.updateResults(results))
+  }
 
   render() {
     return(
@@ -37,12 +35,14 @@ class Search extends React.Component {
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
           <div className="search-books-input-wrapper">
-            <input
-              type="text"
-              value={this.state.query}
-              onChange={(event) =>
-                this.updateQuery(event.target.value)}
-              placeholder="Search by title or author"/>
+            <Debounce time="200" handler="onChange">
+              <input
+                type="text"
+                value={this.state.query}
+                onChange={(event) =>
+                  this.searchAgain(event.target.value)}
+                placeholder="Search by title or author"/>
+            </Debounce>
           </div>
         </div>
         <div className="search-books-results">
